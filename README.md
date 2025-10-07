@@ -32,7 +32,7 @@ This repository is **Hacktoberfest-friendly** and allows you to contribute your 
 2. **Clone your fork**
 
 ```bash
-git clone https://github.com/your-username/data-visualization-python.git
+git clone https://github.com/Student-Chapter-CSE/Data-Visualization.git
 ```
 
 3. **Create a new branch**
