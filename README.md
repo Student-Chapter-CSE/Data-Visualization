@@ -3,7 +3,7 @@
 
 Welcome to **Data Visualization in Python** — an open-source project for **beginners** to explore and share Python data visualization scripts! 🐍
 
-This repository is **Hacktoberfest-friendly** and allows you to contribute your own visualization scripts or notebooks using libraries like `matplotlib`, `seaborn`, `plotly`, and `pandas`.
+This repository is **Hacktoberfest-friendly** and allows you to contribute your own visualization scripts or notebooks using libraries like `matplotlib`, `seaborn`.
 
 🎯 **Goal:** Build a collaborative collection of simple and beginner-friendly data visualizations in Python.
 
