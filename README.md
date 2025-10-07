@@ -38,7 +38,7 @@ git clone https://github.com/your-username/data-visualization-python.git
 3. **Create a new branch**
 
 ```bash
-git checkout -b your_name
+git checkout -b your_branch_name
 ```
 
 4. **Add your visualization**
