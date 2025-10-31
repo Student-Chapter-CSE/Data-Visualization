@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cognitive Atlas</title>
+    <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            background-color: #111;
+            color: #eee;
+            overflow: hidden;
+        }
+        #mynetwork {
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+        }
+        .title-overlay {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 10;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        h1 {
+            margin: 0;
+            font-size: 1.8em;
+            font-weight: 300;
+        }
+        .loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.5em;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="title-overlay">
+        <h1>🌌 Cognitive Atlas</h1>
+    </div>
+
+    <div id="mynetwork"></div>
+    <div id="loading" class="loading">Loading Knowledge Galaxy...</div>
+
+    <script type="text/javascript">
+        async function drawGraph() {
+            const container = document.getElementById('mynetwork');
+            const loadingIndicator = document.getElementById('loading');
+
+            try {
+                // Fetch data from our FastAPI backend
+                const response = await fetch('/api/graph-data');
+                const graphData = await response.json();
+
+                if (!graphData.nodes || graphData.nodes.length === 0) {
+                    loadingIndicator.innerText = "No data to display. Add some entries!";
+                    return;
+                }
+
+                const data = {
+                    nodes: new vis.DataSet(graphData.nodes),
+                    edges: new vis.DataSet(graphData.edges)
+                };
+
+                const options = {
+                    nodes: {
+                        shape: 'dot',
+                        font: {
+                            size: 14,
+                            color: '#ffffff'
+                        },
+                        borderWidth: 2
+                    },
+                    edges: {
+                        width: 0.5,
+                        color: { inherit: 'from' },
+                        smooth: {
+                            type: 'continuous'
+                        }
+                    },
+                    physics: {
+                        solver: 'forceAtlas2Based',
+                        forceAtlas2Based: {
+                            gravitationalConstant: -50,
+                            centralGravity: 0.01,
+                            springLength: 100,
+                            springConstant: 0.08
+                        }
+                    },
+                    interaction: {
+                        hover: true,
+                        tooltipDelay: 200
+                    }
+                };
+
+                loadingIndicator.style.display = 'none';
+                const network = new vis.Network(container, data, options);
+
+            } catch (error) {
+                loadingIndicator.innerText = "Failed to load graph data. Is the server running?";
+                console.error("Error fetching or drawing graph:", error);
+            }
+        }
+
+        // Draw the graph when the page loads
+        window.addEventListener('load', drawGraph);
+    </script>
+
+</body>
+</html>
